@@ -19,9 +19,10 @@ exports.register = (req, res) => {
     .get()
     .then(doc => {
       if (doc.exists) {
+        console.log("this Name Exists, error");
         return res
           .status(400)
-          .json({ message: "This username is already taken." });
+          .json({ error: "This username is already taken." });
       } else {
         return firebase
           .auth()
@@ -65,11 +66,11 @@ exports.register = (req, res) => {
     .catch(err => {
       console.error(err);
       if (err.code === "auth/email-already-in-use") {
-        return res.status(400).json({ message: "Email is already in use." });
+        return res.status(400).json({ error: "Email is already in use." });
       } else {
         return res
           .status(500)
-          .json({ general: "Something went wrong, please try again." });
+          .json({ error: "Something went wrong, please try again." });
       }
     });
 };
@@ -94,7 +95,7 @@ exports.login = (req, res) => {
       console.error(err);
       return res
         .status(403)
-        .json({ general: "Wrong credentials, please try again." });
+        .json({ error: "Wrong credentials, please try again." });
     });
 };
 // Add user details

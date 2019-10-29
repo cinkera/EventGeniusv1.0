@@ -1,6 +1,6 @@
 const admin = require("firebase-admin");
 
-const credential = require("../serviceAccountKey.json");
+const credential = require("../../serviceAccountKey.json");
 
 const config = {
     apiKey: "AIzaSyBrj2GahLSBZ3AxaJFHfMRW2dsQOeJShdI",

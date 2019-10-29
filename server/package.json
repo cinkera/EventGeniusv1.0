@@ -18,6 +18,7 @@
     "firebase-admin": "^8.6.1",
     "firebase-functions": "^3.3.0",
     "firebase-tools": "^7.6.1",
+    "joi": "^14.3.1",
     "morgan": "^1.9.1",
     "nodemon": "^1.19.4"
   }

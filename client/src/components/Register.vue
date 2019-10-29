@@ -1,27 +1,72 @@
 <template>
-    <div>
-        <h1>Register Today!</h1>
-        <input type="text" name="username" v-model="username" required placeholder="Enter your username"/>
-        <br>
-        <input type="text" name="firstname" v-model="firstname" required placeholder="First name..."/>
-        <br>
-        <input type="text" name="lastname" v-model="lastname" required placeholder="Last name..."/>
-        <br>
-        <input type="email" name="email" v-model="email" required @change="validateEmail" placeholder="Email..."/>
-        <br>
-        <input :type="passwordFieldType" @change="checkSame" name="password" v-model="password" required placeholder="Password..."/>
-        <br>
-        <input :type="passwordFieldType" @change="checkSame" name="password2" v-model="password2" required placeholder="Confirm your password"/>
-        <button type="password" @click="switchVisibility">show / hide</button>
-        <br>
-        <input type="date" name="birthday" v-model="birthday" required placeholder="Birthday... "/>
-        <br>
-        <button class="btn-large purple" @click="register">Register!</button>
-    </div>
+  <v-layout column>
+      <v-flex class="container">
+        <div class="form">
+            <v-toolbar flat dense class="purple" dark>
+                <v-toolbar-title>Register</v-toolbar-title>
+            </v-toolbar>
+            <div class="inputs">
+              <v-text-field
+                v-model="firstname"
+                placeholder="First name"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                v-model="lastname"
+                placeholder="Last name"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                v-model="email"
+                @change="validateEmail" 
+                placeholder="Email"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                v-model="username"
+                placeholder="Username"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                :type="passwordFieldType" 
+                v-model="password"
+                placeholder="Password"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                :type="passwordFieldType" 
+                v-model="password2"
+                placeholder="Confirm your Password"
+                @change="checkSame"
+                required
+              ></v-text-field>
+
+              <v-text-field
+                type="date"
+                v-model="birthday"
+                placeholder="Birthday"
+              ></v-text-field>
+
+              <div class="error" v-html="error"></div><br>
+              <div class="center">
+                <v-btn class="button" @click="register">Register!</v-btn>
+                <v-btn class="button" @click="switchVisibility">show / hide passwords</v-btn>
+              </div>
+              <br>
+          </div>
+        </div>
+      </v-flex>
+  </v-layout>
 </template>
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService'
+import PageHeader from '@/components/Header.vue'
 export default {
   data () {
     return {
@@ -32,7 +77,9 @@ export default {
         firstname: "",
         lastname: "",
         birthday: "",
-        passwordFieldType: 'password'
+        passwordFieldType: 'password',
+        error: null,
+        justify: 'center'
     }
   },
   methods: {
@@ -50,10 +97,12 @@ export default {
               birthday: this.birthday
           })
           console.log("response: ", response.data)
-          return status(201).send({ message: "your account was created!" });
-        } catch (err) {
-          console.log("\n ... error in register: ", err);
-          return status(500).send({message: "Error registering you as a user :/"});
+          alert("Your account was created! routing you to your user page");
+          return;
+        } catch (error) {
+          this.error = error.response.data.error
+          // alert("Error registering you as a user :/", err);
+          // return;
         }
       },
       // swithces the visibility of passwords on click
@@ -82,7 +131,46 @@ export default {
             return false;
         }
       }
-
-  }}
+  },
+  components: {
+    PageHeader
+  }
+}
 </script>
 
+<style scoped>
+
+  .error {
+    color: red;
+  }
+
+  .v-btn {
+    color: purple;
+    background-color: rgb(91, 14, 192);
+  }
+
+  .v-text-field {
+    color: purple;
+  }
+
+  .purple {
+    background-color: purple;
+  }
+
+  .container {
+    width: 75%;
+  }
+
+  .form {
+    border-radius: 0.4em;
+    border: 2px solid purple;
+  }
+
+  .inputs {
+    padding: 5px;
+  }
+
+  .center {
+    text-align: center;
+  }
+</style>
