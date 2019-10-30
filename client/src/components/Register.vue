@@ -1,61 +1,69 @@
 <template>
-  <v-layout column>
-      <v-flex class="container">
+  <v-layout column xs6 offset-xs3 class="white elevation-2">
+      <v-flex >
         <div class="form">
             <v-toolbar flat dense class="purple" dark>
                 <v-toolbar-title>Register</v-toolbar-title>
             </v-toolbar>
             <div class="inputs">
+              <br>
               <v-text-field
                 v-model="firstname"
-                placeholder="First name"
+                label="First Name"
+                outlined
                 required
               ></v-text-field>
 
               <v-text-field
                 v-model="lastname"
-                placeholder="Last name"
+                label="Last name"
+                outlined
                 required
               ></v-text-field>
 
               <v-text-field
                 v-model="email"
                 @change="validateEmail" 
-                placeholder="Email"
+                label="Email"
+                outlined
                 required
               ></v-text-field>
 
               <v-text-field
                 v-model="username"
-                placeholder="Username"
+                label="Username"
+                outlined
                 required
               ></v-text-field>
 
               <v-text-field
                 :type="passwordFieldType" 
                 v-model="password"
-                placeholder="Password"
+                label="Password"
+                outlined
                 required
               ></v-text-field>
 
               <v-text-field
                 :type="passwordFieldType" 
                 v-model="password2"
-                placeholder="Confirm your Password"
+                label="Confirm your Password"
                 @change="checkSame"
+                outlined
                 required
               ></v-text-field>
 
               <v-text-field
                 type="date"
+                label="Birthday"
                 v-model="birthday"
-                placeholder="Birthday"
+                outlined
               ></v-text-field>
 
               <div class="error" v-html="error"></div><br>
               <div class="center">
-                <v-btn class="button" @click="register">Register!</v-btn>
-                <v-btn class="button" @click="switchVisibility">show / hide passwords</v-btn>
+                <v-btn class="purple" @click="register">Register!</v-btn>
+                <v-btn class="purple" @click="switchVisibility">show / hide passwords</v-btn>
               </div>
               <br>
           </div>
@@ -65,8 +73,9 @@
 </template>
 
 <script>
+/*eslint no-console: "error"*/
+console.log("\n register.vue script");
 import AuthenticationService from '@/services/AuthenticationService'
-import PageHeader from '@/components/Header.vue'
 export default {
   data () {
     return {
@@ -78,8 +87,7 @@ export default {
         lastname: "",
         birthday: "",
         passwordFieldType: 'password',
-        error: null,
-        justify: 'center'
+        error: null
     }
   },
   methods: {
@@ -131,46 +139,24 @@ export default {
             return false;
         }
       }
-  },
-  components: {
-    PageHeader
   }
 }
 </script>
 
 <style scoped>
-
   .error {
     color: red;
-  }
-
-  .v-btn {
-    color: purple;
-    background-color: rgb(91, 14, 192);
-  }
-
-  .v-text-field {
-    color: purple;
-  }
-
-  .purple {
-    background-color: purple;
-  }
-
-  .container {
-    width: 75%;
-  }
-
-  .form {
-    border-radius: 0.4em;
-    border: 2px solid purple;
+    background-color: white;
   }
 
   .inputs {
-    padding: 5px;
+    margin: auto;
+    width: 75%
   }
 
   .center {
     text-align: center;
+    margin: auto;
+    padding-left: 5px;
   }
 </style>

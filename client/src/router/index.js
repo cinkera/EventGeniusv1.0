@@ -1,27 +1,44 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import HomePage from '@/components/HomePage'
+import VueRouter from 'vue-router'
+import HomePage from '../components/HomePage'
 import Register from '@/components/Register'
-import User from '@/components/User'
+import About from '@/components/About'
+import colors from 'vuetify/lib/util/colors'
 
-Vue.use(Router)
+Vue.use(VueRouter)
 
-export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'HomePage',
-      component: HomePage
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    {
-      path: '/user/:userHandle',
-      name: 'user',
-      component: User
-    }
-  ]
+const routes = [
+  {
+    path: '/',
+    name: 'homepage',
+    component: HomePage
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
+  },
+  {
+    path: '/about',
+    name: 'about',
+    component: About
+  }
+]
+
+const router = new VueRouter({
+  routes
 })
+
+export default router
+
+// export default new Vuetify({
+//   theme: {
+//     themes: {
+//       light: {
+//         primary: colors.red.darken1, // #E53935
+//         secondary: colors.red.lighten4, // #FFCDD2
+//         accent: colors.indigo.base, // #3F51B5
+//       },
+//     },
+//   },
+// })
