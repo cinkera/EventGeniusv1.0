@@ -13,6 +13,7 @@ exports.register = (req, res) => {
     lastname: req.body.lastname,
     birthday: req.body.birthday
   };
+  let response = [];
   console.log("\n ... newUser: ", newUser);
   let token, userId;
   db.doc(`/users/${newUser.handle}`)
@@ -58,10 +59,14 @@ exports.register = (req, res) => {
         handle: "",
         imageUrl: ""
       });
+      response.push({ "user": userCredentials });
+      console.log("\n ...response: ", response);
       return db.doc(`/users/${newUser.handle}`).set(userCredentials);
     })
     .then(() => {
-      return res.status(201).json({ token });
+      response.push({ "token": token });
+      console.log("\n ...response: ", response);
+      return res.status(201).json(response);
     })
     .catch(err => {
       console.error(err);
@@ -76,20 +81,27 @@ exports.register = (req, res) => {
 };
 
 // Login user
-exports.login = (req, res) => {
-  const user = {
-    email: req.body.email,
-    password: req.body.password
-  };
-
-  firebase
+exports.login = async (req, res) => {
+  try {
+    const user = {
+      email: req.body.email,
+      password: req.body.password
+    };
+    let response = [];
+    let getUserResponse = await db.collection("users").where("email", "==", user.email).get();
+    for(const user of getUserResponse.docs) {
+      // console.log("\n ... user:", user.data());
+      response.push({"user": user.data()});
+    }
+    firebase
     .auth()
     .signInWithEmailAndPassword(user.email, user.password)
     .then(data => {
       return data.user.getIdToken();
     })
     .then(token => {
-      return res.json({ token });
+      response.push({"token": token});
+      return res.status(200).json(response);;
     })
     .catch(err => {
       console.error(err);
@@ -97,11 +109,31 @@ exports.login = (req, res) => {
         .status(403)
         .json({ error: "Wrong credentials, please try again." });
     });
+    
+  } catch(error) {
+    console.log("\n ... error: ", error);
+    return res.status(500).json({error: error.code});
+  }
+};
+// Logout user
+exports.logout = async (req, res) => {
+  console.log("\n ... logout function in user.js");
+  try {
+    const response = await firebase.auth().signOut();
+    console.log("\n ... response from logout: ", response);
+    console.log("\n ... signed out user!");
+    return response;
+    
+  } catch (e){
+    console.log("\n ... error logging out", err);
+    res.status(500).json({ error: err.code });
+  } 
 };
 // Add user details
 
 // Get authenticated user details
 exports.getAuthUser = async (req, res) => {
+  console.log("\n ... users.js/getAuthUser -- req.user: ", req.user );
   let userData = {};
 
   try {
@@ -145,7 +177,7 @@ exports.getAuthUser = async (req, res) => {
           imageUrl: doc.data().imageUrl
         };
       });
-      
+      console.log("\n ... userData: ", userData);
       return res.json(userData);
     } else {
       return res.status(404).json({ error: "User not found :(" });

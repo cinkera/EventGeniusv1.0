@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import colors from 'vuetify/lib/util/colors'
+
+/* Component Imports */
 import HomePage from '../components/HomePage'
 import Register from '@/components/Register'
+import Login from '@/components/Signin'
 import About from '@/components/About'
-import colors from 'vuetify/lib/util/colors'
+import UserPage from '@/components/User'
 
 Vue.use(VueRouter)
 
@@ -22,7 +26,17 @@ const routes = [
     path: '/about',
     name: 'about',
     component: About
-  }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
+  },
+  {
+    path: '/user/:userHandle',
+    name: 'user',
+    component: UserPage
+  },
 ]
 
 const router = new VueRouter({

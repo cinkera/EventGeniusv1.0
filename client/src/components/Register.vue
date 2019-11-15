@@ -2,7 +2,7 @@
   <v-layout column xs6 offset-xs3 class="white elevation-2">
       <v-flex >
         <div class="form">
-            <v-toolbar flat dense class="purple" dark>
+            <v-toolbar flat dense class="purple darken-1" dark>
                 <v-toolbar-title>Register</v-toolbar-title>
             </v-toolbar>
             <div class="inputs">
@@ -62,8 +62,8 @@
 
               <div class="error" v-html="error"></div><br>
               <div class="center">
-                <v-btn class="purple" @click="register">Register!</v-btn>
-                <v-btn class="purple" @click="switchVisibility">show / hide passwords</v-btn>
+                <v-btn class="purple darken-1" @click="register">Register!</v-btn>
+                <v-btn class="purple darken-1" @click="switchVisibility">show / hide passwords</v-btn>
               </div>
               <br>
           </div>
@@ -105,7 +105,11 @@ export default {
               birthday: this.birthday
           })
           console.log("response: ", response.data)
+          this.$store.dispatch('setToken', response.data[1].token)
+          this.$store.dispatch('setUser', response.data[0].user)
           alert("Your account was created! routing you to your user page");
+          let route = "/user/"+ response.data[0].user.handle;
+          this.$router.push(route);
           return;
         } catch (error) {
           this.error = error.response.data.error
@@ -138,6 +142,10 @@ export default {
             alert("You have entered an invalid email address!");
             return false;
         }
+      },
+      navigateTo(route) {
+        console.log("routing to: ", route);
+        this.$router.push(route);
       }
   }
 }

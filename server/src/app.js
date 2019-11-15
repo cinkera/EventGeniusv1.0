@@ -22,11 +22,14 @@ app.use(cors({ origin: true }));
 //     checkExists
 //   } = require("./handlers/users");
 
-const { register, getAuthUser, login, getUserData } = require("./handlers/users")
+const { register, getAuthUser, login, getUserData, logout } = require("./handlers/users")
 
-/* routes */
+/* User Routes */
 app.post('/register', RegisterPolicy.register, register);
+app.post('/login', login);
+
 app.get('/user/:userHandle', auth, getAuthUser);
+app.get('/logout', logout);
 
 app.listen(process.env.PORT || 8081);
 console.log("express server running on port 8081");

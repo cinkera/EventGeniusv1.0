@@ -5,8 +5,13 @@ export default {
         console.log("\n ... AuthenticationService.js");
         return Api().post('register', credentials);
     },
-    getUser (credentials) {
-        return Api().get('user/:userHandle');
+    login (credentials) {
+        console.log("\n ... signIn function of AuthServices");
+        return Api().post('login', credentials)
+    },
+    logout() {
+        console.log("\n ... signOut function of AuthServices");
+        return Api().get('logout');
     }
 }
 
